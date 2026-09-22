@@ -1,0 +1,13 @@
+name: CI
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run hardware-free tests
+        run: make all test CFLAGS='-O2 -Wall -Wextra -Wpedantic -Werror -std=c11'
+      - name: Check help without accessing hardware
+        run: ./build/jd1ctl --help
